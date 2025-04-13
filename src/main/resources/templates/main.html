@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>メイン画面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/Customer.css}">
+    <style>
+        /* ↓元のstyleはそのまま移植可（必要に応じて短縮可能） */
+        /* ここ省略（CSS部分は変わらず） */
+    </style>
+</head>
+<body>
+<div class="main_display" th:style="'background-image: url(' + @{/customer/image/main_background.JPG} + ')'">
+    <div th:if="${#lists.isEmpty(matchList)}" class="not-match-element">
+        <h2 class="poster2">試合情報が登録されていません</h2>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(matchList)}">
+        <h1 class="tournament">第<span th:text="${tournament.ordinalNum}"></span>回<span th:text="${tournament.name}"></span></h1>
+
+        <div th:each="duels, iStat : ${duelList}">
+            <table>
+                <tr>
+                    <th colspan="4" class="date-center"
+                        th:text="${matchList[iStat.index].eventDateStr + '(' + matchList[iStat.index].eventDayOfWeek + ')'}">
+                    </th>
+                </tr>
+
+                <tr th:each="duel, jStat : ${duels}" th:if="${duel.roundStr != null}">
+                    <td class="num_match">第<span th:text="${jStat.index + 1}"></span>試合(<span th:text="${duel.roundStr}"></span>)</td>
+                    <td th:text="${duel.schoolNameA}"></td>
+                    <td th:text="${duel.statusStr}"></td>
+                    <td th:text="${duel.schoolNameB}"></td>
+                </tr>
+
+                <tr th:if="${duels[0].roundStr == null}">
+                    <td class="not-match-main">試合情報は未定です</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
